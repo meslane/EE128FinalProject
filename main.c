@@ -53,7 +53,7 @@ enum States{INIT, COIN, GAME, END};
 unsigned long long p = 0;
 unsigned char vga_array[26250] = {0};
 
-char coin = 0;
+unsigned char coin = 0;
 
 char alphabet[36][5] = {
 		{ //0
@@ -354,48 +354,6 @@ void toggle_paddle(unsigned char* array, unsigned char x, unsigned char y, unsig
 	}
 }
 
-/*
-void toggle_coin(unsigned char* array, const unsigned char x_pos, const unsigned char y_pos) {
-	unsigned char i;
-
-	char x[36] = {0,0,0,1,2,1,2, //C
-				  4,4,4,6,6,6,5,5, //O
-				  8,9,10,8,9,10,9,9,9, //I
-				  12,12,12,12,12,15,15,15,15,15,13,14}; //N
-	char y[36] = {1,2,3,0,0,4,4, //C
-				  1,2,3,1,2,3,0,4, //O
-				  0,0,0,4,4,4,1,2,3, //I
-				  0,1,2,3,4,0,1,2,3,4,1,2}; //N
-
-	for (i=0;i<36;i++) {
-		toggle_pixel(array, x[i]+x_pos, y[i]+y_pos);
-	}
-}
-
-void toggle_insert(unsigned char* array, const unsigned char x_pos, const unsigned char y_pos) {
-	unsigned char i;
-
-	char x[60] = {0,1,2,0,1,2,1,1,1, //I
-				  4,4,4,4,4,7,7,7,7,7,5,6, //N
-				  9,10,11,9,10,11,9,10,11,9,11, //S
-				  13,14,15,13,14,15,13,14,15,13,13, //E
-				  17,17,17,17,17,18,19,18,19,19, //R
-				  21,22,23,22,22,22,22
-				 };
-	char y[60] = {0,0,0,4,4,4,1,2,3, //I
-				  0,1,2,3,4,0,1,2,3,4,1,2, //N
-				  0,0,0,2,2,2,4,4,4,1,3, //S
-				  0,0,0,2,2,2,4,4,4,1,3, //E
-				  0,1,2,3,4,0,1,2,3,4, //R
-				  0,0,0,1,2,3,4
-				 };
-
-	for (i=0;i<60;i++) {
-		toggle_pixel(array, x[i]+x_pos, y[i]+y_pos);
-	}
-}
-*/
-
 /* accepts an 1x5 array where each bit is a horizontal pixel */
 void toggle_char(unsigned char* array, char* chararray, const unsigned char x_pos, const unsigned char y_pos) {
 	unsigned char i;
@@ -504,10 +462,12 @@ int main(void) {
 	ADC0_SC1A = 0x1F; // Disable the module, ADCH = 11111
 
 	//fiducials
+	/*
 	toggle_pixel(vga_array,0,0);
 	toggle_pixel(vga_array,39,0);
 	toggle_pixel(vga_array,0,29);
 	toggle_pixel(vga_array,39,29);
+	*/
 
 	unsigned char p1_pos_current = 0;
 	unsigned char p1_pos = 5;
@@ -545,7 +505,7 @@ int main(void) {
 			p2_score[0] = '\0';
 
 			b.v_x = 1;
-			b.v_y = 1;
+			b.v_y = 0;
 			b.x = 20;
 			b.y = 14;
 			b.x_prev = 0;
@@ -568,7 +528,7 @@ int main(void) {
 			toggle_string(vga_array, "COIN\0", 12, 11);
 			for (unsigned int i=0;i<500000;i++);
 
-			if (coin >= 1) {
+			if (coin > 0) {
 				//game init
 				toggle_pixel(vga_array, 0, 0);
 				toggle_paddle(vga_array, 2, p1_pos_current, PADDLE_SIZE);
